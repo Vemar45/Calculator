@@ -2,8 +2,8 @@ package com.example.calculator
 
 class Calculator {
 
-    private var helpStr1 =""
-    private var helpStr2 =""
+    private var substringBeforeSub_example =""
+    private var substringAfterSub_example =""
     private var start = 0
     private var index = 0
     private var end = 0
@@ -12,7 +12,6 @@ class Calculator {
     fun solve(example: String): String {
 
         var answer  = example
-        if(answer.first()=='-') answer = answer.replaceFirst('-','_')
         while (answer.contains('/')) {
             answer = getNewAnswer('/',answer)
         }
@@ -29,7 +28,7 @@ class Calculator {
         return answer.replace("_","-").replace('.',',')
     }
 
-    private fun solve1(str: String): String {
+    private fun solveSub_example(str: String): String {
         val index = str.indexOfAny(charArrayOf('+', '-', '/', '*'))
         var a = str.substring(0, index)
         var b = str.substring(index + 1)
@@ -48,7 +47,7 @@ class Calculator {
 
     private fun getNewAnswer(x: Char,answer: String): String {
         index = answer.indexOf(x)
-        helpStr1 = answer.substring(0, index)
+        substringBeforeSub_example = answer.substring(0, index)
         arrOfCharr = when(x){
             '*'-> charArrayOf('+', '-', '/')
             '-'-> charArrayOf('+', '*', '/')
@@ -56,20 +55,20 @@ class Calculator {
             '/'-> charArrayOf('+', '-', '*')
             else -> charArrayOf()
         }
-        start = helpStr1.lastIndexOfAny(arrOfCharr) + 1
+        start = substringBeforeSub_example.lastIndexOfAny(arrOfCharr) + 1
         if (start == -1) {
             start = 0
-            helpStr1 = ""
+            substringBeforeSub_example = ""
         } else {
-            helpStr1 = helpStr1.substring(0, start)
+            substringBeforeSub_example = substringBeforeSub_example.substring(0, start)
         }
         end = answer.indexOfAny(charArrayOf('+', '-', '/', '*'), index + 1, true)
         if (end == -1) {
             end = answer.length
-            helpStr2 = ""
+            substringAfterSub_example = ""
         } else {
-            helpStr2 = answer.substring(end)
+            substringAfterSub_example = answer.substring(end)
         }
-        return helpStr1 + solve1(answer.substring(start, end)) + helpStr2
+        return substringBeforeSub_example + solveSub_example(answer.substring(start, end)) + substringAfterSub_example
     }
 }
